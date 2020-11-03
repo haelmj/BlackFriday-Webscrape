@@ -24,5 +24,13 @@ black_deals_window = driver.window_handles[0]
 FOLDER = './categories'
 
 # the fun begins here...
+# get Cateogry names
+def category_name():
+    category = WebDriverWait(driver, 100).until(
+        EC.presence_of_element_located((By.LINK_TEXT, 'Category'))
+        )
+    elements = category.find_elements_by_tag_name('a')
+    categories = [a.get_attribute('textContent') for a in elements]
+    yield categories
 
-
+print(next(category_name()))
