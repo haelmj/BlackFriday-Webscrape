@@ -27,9 +27,12 @@ FOLDER = './categories'
 # the fun begins here...
 # get Cateogry names
 def category_name():
+    # look for article tag
     category = WebDriverWait(driver, 100).until(
-        EC.presence_of_element_located((By.LINK_TEXT, 'Category'))
+        EC.presence_of_element_located((By.TAG_NAME, 'article'))
         )
+    # get category title and textcontent of a tags
+    title = category.find_element_by_tag_name('h2').get_attribute('textContent')
     elements = category.find_elements_by_tag_name('a')
     categories = [a.get_attribute('textContent') for a in elements]
     return categories
