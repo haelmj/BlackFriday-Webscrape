@@ -15,11 +15,12 @@ import csv
 import time
 
 # set path to chromedriver and initialize chrome webdriver
+STARTPAGE = 'https://www.jumia.com.ng/mlp-black-friday/?rating=4-5'
 PATH = "C:/Program Files (x86)/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
 # load web page; set window handle to 0; set storage folder
-driver.get('https://www.jumia.com.ng/mlp-black-friday/?rating=4-5')
+driver.get(STARTPAGE)
 black_deals_window = driver.window_handles[0]
 FOLDER = './categories'
 
@@ -31,6 +32,6 @@ def category_name():
         )
     elements = category.find_elements_by_tag_name('a')
     categories = [a.get_attribute('textContent') for a in elements]
-    yield categories
+    return categories
 
-print(next(category_name()))
+print(category_name())
