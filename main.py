@@ -84,29 +84,28 @@ def get_product_info(product):
 
 
 if __name__ == "__main__":
-    # try:
-    get_sub_categories()
-    for handle in driver.window_handles:
-        if handle != driver.window_handles[0]:
-            elements, categories, path = window_switching(handle)
-            sub_links = [e.get_attribute('href') for e in elements]
-            i = 0
-            while i < len(categories):
-                with open(f'{path}/{categories[i]}.csv', 'w', newline='', encoding='utf-8') as file:
-                    file_writer = csv.writer(file)
-                    file_writer.writerow(['Name', 'New Price', 'Old Price', 'Rating', 'URL'])
+    try:
+        get_sub_categories()
+        for handle in driver.window_handles:
+            if handle != driver.window_handles[0]:
+                elements, categories, path = window_switching(handle)
+                sub_links = [e.get_attribute('href') for e in elements]
+                i = 0
+                while i < len(categories):
                     for link in sub_links:
-                        driver.execute_script(f"window.open('{link}')")
-                        driver.switch_to.window(driver.window_handles[-1])
-                        products = get_products()
-                        for product in products:
-                            name, new_price, old_price, rating, web_link = get_product_info(product)
-                            file_writer.writerow([name, new_price, old_price, rating, web_link])
-                        driver.close()
-                        driver.switch_to.window(handle)
-
-
-    # except Exception as e:
-    #    pass
-    # finally:
-    #     pass    
+                        with open(f'{path}/{categories[i]}.csv', 'w', newline='', encoding='utf-8') as file:
+                            file_writer = csv.writer(file)
+                            file_writer.writerow(['Name', 'New Price', 'Old Price', 'Rating', 'URL'])
+                            driver.execute_script(f"window.open('{link}')")
+                            driver.switch_to.window(driver.window_handles[-1])
+                            products = get_products()
+                            for product in products:
+                                name, new_price, old_price, rating, web_link = get_product_info(product)
+                                file_writer.writerow([name, new_price, old_price, rating, web_link])
+                            driver.close()
+                            driver.switch_to.window(handle)
+                            i += 1
+    except Exception as e:
+       driver.close()
+    finally:
+        driver.quit()    
