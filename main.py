@@ -2,6 +2,7 @@
 author: Michael Ndon
 title: Blackfridayscrape
 subject-website: jumia.com.ng
+description: collates 4-5 star rated black friday deals from cheapest to highest by category
 
 """
 
@@ -31,6 +32,17 @@ def create_folder(title, name):
     os.makedirs(path)
     return path
 
+# trying to remodel folder creation: incomplete
+def generate_path(subfolder, name):
+    root_folder = os.path.exists(FOLDER)
+    subfolder_exists = os.path.exists(os.path.join(FOLDER, subfolder))
+    if not root_folder:
+        os.makedirs(f'/{FOLDER}')
+    elif root_folder:
+        if subfolder_exists:
+            os.makedirs(f'/{FOLDER}/{subfolder}')
+    
+
 # get Cateogry names
 def get_category_names(tag):
     # look for article tag
@@ -44,6 +56,7 @@ def get_category_names(tag):
         title = category.find_element_by_tag_name('h2').get_attribute('textContent')
     elements = category.find_elements_by_tag_name('a')
     categories = [a.get_attribute('textContent') for a in elements]
+    # if driver.current_window_handle == driver.window_handles[0]:
     for i in categories: path = create_folder(title, i)
     return elements, categories, path
 
