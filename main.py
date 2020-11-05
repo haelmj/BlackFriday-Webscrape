@@ -51,6 +51,7 @@ def get_sub_categories():
     for link in category_links:
         driver.execute_script(f"window.open('{link}')")
         time.sleep(2)
+    return categories
 
 # switch into the different windows 
 def window_switching(handle):
@@ -76,7 +77,21 @@ def get_product_info(product):
 
 
 if __name__ == "__main__":
-    get_sub_categories()
-    for handle in driver.window_handles:
-        if handle != driver.window_handles[0]:
-            elements, categories = window_switching(handle)
+    try:
+        get_sub_categories()
+        for handle in driver.window_handles:
+            if handle != driver.window_handles[0]:
+                elements, categories = window_switching(handle)
+                sub_links = [e.get_attribute('href') for e in elements]
+                for link in sub_links:
+                    driver.execute_script(f"window.open('{link}')")
+                    driver.switch_to_window(driver.window_handles[-1])
+                    products = get_products()
+                    for product in products:
+                        name, new_price, old_price, rating, web_link = get_product_info(product)
+
+    except Exception as e:
+        print(e)
+        driver.close()
+    finally:
+        driver.close()    
