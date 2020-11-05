@@ -18,7 +18,7 @@ import os
 
 # set path to chromedriver and initialize chrome webdriver
 STARTPAGE = 'https://www.jumia.com.ng/mlp-black-friday/?sort=lowest-price&rating=4-5'
-PATH = "C:/Program Files (x86)/chromedriver.exe"
+PATH = "/assets/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
 # load web page; set window handle to 0; set storage folder
