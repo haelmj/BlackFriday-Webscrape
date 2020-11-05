@@ -53,14 +53,13 @@ def get_sub_categories():
         time.sleep(2)
 
 # switch into the different windows 
-def window_switching():
-    for handle in driver.window_handles:
-        if handle != driver.window_handles[0]:
-            driver.switch_to_window(handle)
-            get_sub_categories()
+def window_switching(handle):
+    driver.switch_to_window(handle)
+    sub_elements, sub_categories = get_category_names('article')
+    return sub_elements, sub_categories        
 
 # get products container
-def get_products(driver):
+def get_products():
     products_list = driver.find_element_by_css_selector('section.card -fh')
     products = products_list.find_elements_by_tag_name('article')
     return products
@@ -77,4 +76,7 @@ def get_product_info(product):
 
 
 if __name__ == "__main__":
-    pass
+    get_sub_categories()
+    for handle in driver.window_handles:
+        if handle != driver.window_handles[0]:
+            elements, categories = window_switching(handle)
