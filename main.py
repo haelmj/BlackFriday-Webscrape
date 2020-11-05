@@ -1,7 +1,7 @@
 """
 author: Michael Ndon
 title: Blackfridayscrape
-subject-website: jumia.com
+subject-website: jumia.com.ng
 
 """
 
@@ -26,8 +26,8 @@ black_deals_window = driver.window_handles[0]
 FOLDER = 'categories'
 
 # the fun begins here...
-def create_folder(name):
-    os.makedirs(os.path.join(FOLDER, name))
+def create_folder(title, name):
+    os.makedirs(os.path.join(FOLDER, title, name))
 
 # get Cateogry names
 def get_category_names():
@@ -37,22 +37,30 @@ def get_category_names():
         )
     # get category title and textcontent of a tags
     # title = category.find_element_by_tag_name('h2').get_attribute('textContent')
+    if EC.presence_of_element_located((By.CSS_SELECTOR, 'p.-pvs -phm -m')):
+        title = category.find_element_by_css_selector('p.-pvs -phm -m')
     elements = category.find_elements_by_tag_name('a')
     categories = [a.get_attribute('textContent') for a in elements]
-    for i in categories: create_folder(i)
+    for i in categories: create_folder(title, i)
     return elements, categories
 
-def get_sub_cateogories():
+# get sub categories and open them up
+def get_sub_categories():
     elements, categories = get_category_names()
-    i = 1
     category_links = [e.get_attribute('href') for e in elements]
-    while i < len(categories):
-        for link in category_links:
-            driver.execute_script(f"window.open('{link}')")
-            driver.switch_to.window(driver.window_handles[i])
-            print(get_category_names())
-            time.sleep(5)
-            i += 1
+    for link in category_links:
+        driver.execute_script(f"window.open('{link}')")
+        time.sleep(2)
 
-get_sub_cateogories()
+# switch into the different windows 
+def window_switching():
+    for handle in driver.window_handles:
+        if handle != driver.window_handles[0]:
+            driver.switch_to_window(handle)
+            get_sub_categories()
 
+def get_products():
+
+if __name__ == "__main__":
+    try:
+        get_sub_categories()
