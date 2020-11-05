@@ -30,10 +30,10 @@ def create_folder(title, name):
     os.makedirs(os.path.join(FOLDER, title, name))
 
 # get Cateogry names
-def get_category_names():
+def get_category_names(tag):
     # look for article tag
     category = WebDriverWait(driver, 100).until(
-        EC.presence_of_element_located((By.TAG_NAME, 'article'))
+        EC.presence_of_element_located((By.TAG_NAME, tag))
         )
     # get category title and textcontent of a tags
     # title = category.find_element_by_tag_name('h2').get_attribute('textContent')
@@ -59,8 +59,15 @@ def window_switching():
             driver.switch_to_window(handle)
             get_sub_categories()
 
-def get_products():
+def get_products(element):
+    products_list = driver.find_element_by_css_selector('section.card -fh')
+    products = products_list.find_elements_by_tag_name('article')
+    return products
+
+def get_product_info(products):
+    for product in products:
+        product_info = products.find_element_by_css_selector('div.info')
+        product_name = product_info.find_element_by_tag_name('h3').get_attribute('textContent')
 
 if __name__ == "__main__":
-    try:
-        get_sub_categories()
+    pass
