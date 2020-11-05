@@ -46,7 +46,7 @@ def get_category_names(tag):
 
 # get sub categories and open them up
 def get_sub_categories():
-    elements, categories = get_category_names()
+    elements, categories = get_category_names('article')
     category_links = [e.get_attribute('href') for e in elements]
     for link in category_links:
         driver.execute_script(f"window.open('{link}')")
@@ -59,15 +59,22 @@ def window_switching():
             driver.switch_to_window(handle)
             get_sub_categories()
 
-def get_products(element):
+# get products container
+def get_products(driver):
     products_list = driver.find_element_by_css_selector('section.card -fh')
     products = products_list.find_elements_by_tag_name('article')
     return products
 
-def get_product_info(products):
-    for product in products:
-        product_info = products.find_element_by_css_selector('div.info')
-        product_name = product_info.find_element_by_tag_name('h3').get_attribute('textContent')
+# retrieve information on any product passed in
+def get_product_info(product):
+    product_link = product.find_element_by_css_selector('a.core').get_attribute('href')
+    product_info = product.find_element_by_css_selector('div.info')
+    product_name = product_info.find_element_by_tag_name('h3').get_attribute('textContent')
+    new_price = product_info.find_element_by_css_selector('div.prc').get_attribute('textContent')
+    normal_price = product_info.find_element_by_css_selector('div.old').get_attribute('textContent')
+    product_rating = product_info.find_element_by_css_selector('div.stars_s').get_attribute('textContent')
+    return product_name, new_price, normal_price, product_rating, product_link
+
 
 if __name__ == "__main__":
     pass
