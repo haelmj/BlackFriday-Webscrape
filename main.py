@@ -28,6 +28,7 @@ FOLDER = 'categories'
 # the fun begins here...
 def create_folder(title, name):
     os.makedirs(os.path.join(FOLDER, title, name))
+    return os.path.join(FOLDER, title, name)
 
 # get Cateogry names
 def get_category_names(tag):
@@ -68,12 +69,13 @@ def get_products():
 # retrieve information on any product passed in
 def get_product_info(product):
     product_link = product.find_element_by_css_selector('a.core').get_attribute('href')
+    link_button = f'=HYPERLINK("{product_link}", "view")'
     product_info = product.find_element_by_css_selector('div.info')
     product_name = product_info.find_element_by_tag_name('h3').get_attribute('textContent')
     new_price = product_info.find_element_by_css_selector('div.prc').get_attribute('textContent')
     normal_price = product_info.find_element_by_css_selector('div.old').get_attribute('textContent')
     product_rating = product_info.find_element_by_css_selector('div.stars_s').get_attribute('textContent')
-    return product_name, new_price, normal_price, product_rating, product_link
+    return product_name, new_price, normal_price, product_rating, link_button
 
 
 if __name__ == "__main__":
