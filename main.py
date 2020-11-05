@@ -75,8 +75,11 @@ def get_product_info(product):
     product_info = product.find_element_by_css_selector('div.info')
     product_name = product_info.find_element_by_tag_name('h3').get_attribute('textContent')
     new_price = product_info.find_element_by_css_selector('div.prc').get_attribute('textContent')
-    normal_price = product_info.find_element_by_css_selector('div.s-prc-w div.old').get_attribute('textContent')
-    product_rating = product_info.find_element_by_css_selector('div.rev div.stars._s').get_attribute('textContent')
+    try:
+        normal_price = product_info.find_element_by_css_selector('div.s-prc-w > div.old').get_attribute('textContent')
+    except:
+        normal_price = 'No price deviation'
+    product_rating = product_info.find_element_by_css_selector('div.rev > div.stars._s').get_attribute('textContent')
     return product_name, new_price, normal_price, product_rating, link_button
 
 
