@@ -30,7 +30,7 @@ This project requires preferably version 86.0.4240 of Chrome browser as well as 
 python -m venv venv
 ```
 
-4. Activate the virtual environment:  
+4. Activate the virtual environment:
 For Windows Command Line Users:
 
 ```
