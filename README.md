@@ -12,8 +12,8 @@ This project requires preferably version 86.0.4240 of Chrome browser as well as 
 
 **WebDriver**
 
-- [Chrome WebDriver](https://chromedriver.chromium.org/)
- *Note:* A chrome webdriver for version 86 can be found in the assets folder of this project. If you have a different version of Chrome, download the chrome webdriver for that version and replace it with the one in the assets folder.
+- [Chrome WebDriver](https://chromedriver.chromium.org/)  
+*Note:* A chrome webdriver for version 86 can be found in the assets folder of this project. If you have a different version of Chrome, download the chrome webdriver for that version and replace it with the one in the assets folder.
 
 ### Setup
 
