@@ -31,13 +31,13 @@ python -m venv venv
 ```
 
 4. Activate the virtual environment:  
- For Windows Command Line Users:
+For Windows Command Line Users:
 
 ```
 venv\Scripts\activate.bat
 ```
 
- For bash users:
+For bash users:
 
 ```
 source /venv/Scripts/activate
