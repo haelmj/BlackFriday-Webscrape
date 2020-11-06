@@ -20,8 +20,9 @@ This project requires version 86.0.4240 of Chrome browser as well as Python 3 in
 1. Clone this project to your local system:
 `git clone https://github.com/haelmj/BlackFriday-Webscrape.git`
 
-2. Setup Chrome driver:
-    - Copy the chromedriver from the assets folder
+2. Setup Chrome Driver:
+
+    - Include the ChromeDriver location in your PATH environment variable
 
 3. Setup a virtual environment:
 
