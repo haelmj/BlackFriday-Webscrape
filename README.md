@@ -3,6 +3,7 @@
 A web scraper that gathers cheapest black friday deals per category on multiple e-commerce sites
 
 **Estimated Scrape Time**: *15 minutes*
+[View Scraped Samples](https://drive.google.com/drive/folders/1MvlWonmnwYqtxUyVLNLuDqLf3iBk-TGA?usp=sharing)
 
 ## Requirements
 
