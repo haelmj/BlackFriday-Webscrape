@@ -27,21 +27,10 @@ black_deals_window = driver.window_handles[0]
 FOLDER = 'categories'
 
 # the fun begins here...
-def create_folder(title, name):
-    path = os.path.join(FOLDER, title, name)
+def create_folder(title):
+    path = os.path.join(FOLDER, title)
     os.makedirs(path)
     return path
-
-# trying to remodel folder creation: incomplete
-def generate_path(subfolder, name):
-    root_folder = os.path.exists(FOLDER)
-    subfolder_exists = os.path.exists(os.path.join(FOLDER, subfolder))
-    if not root_folder:
-        os.makedirs(f'/{FOLDER}')
-    elif root_folder:
-        if subfolder_exists:
-            os.makedirs(f'/{FOLDER}/{subfolder}')
-    
 
 # get Cateogry names
 def get_category_names(tag):
@@ -50,19 +39,17 @@ def get_category_names(tag):
         EC.presence_of_element_located((By.TAG_NAME, tag))
         )
     # get category title and textcontent of a tags
-    try:
-        title = category.find_element_by_tag_name('p').get_attribute('textContent')
-    except:
-        title = category.find_element_by_tag_name('h2').get_attribute('textContent')
     elements = category.find_elements_by_tag_name('a')
     categories = [a.get_attribute('textContent') for a in elements]
-    # if driver.current_window_handle == driver.window_handles[0]:
-    for i in categories: path = create_folder(title, i)
-    return elements, categories, path
+    if driver.current_window_handle == driver.window_handles[0]:
+        for i in categories:
+            create_folder(i)
+    
+    return elements, categories
 
 # get sub categories and open them up
 def get_sub_categories():
-    elements, categories, path = get_category_names('article')
+    elements, categories = get_category_names('article')
     category_links = [e.get_attribute('href') for e in elements]
     for link in category_links:
         driver.execute_script(f"window.open('{link}')")
@@ -72,8 +59,8 @@ def get_sub_categories():
 # switch into the different windows 
 def window_switching(handle):
     driver.switch_to.window(handle)
-    sub_elements, sub_categories, path = get_category_names('article')
-    return sub_elements, sub_categories, path        
+    sub_elements, sub_categories = get_category_names('article')
+    return sub_elements, sub_categories        
 
 # get products container
 def get_products():
@@ -92,33 +79,41 @@ def get_product_info(product):
         normal_price = product_info.find_element_by_css_selector('div.s-prc-w > div.old').get_attribute('textContent')
     except:
         normal_price = 'No price deviation'
-    product_rating = product_info.find_element_by_css_selector('div.rev > div.stars._s').get_attribute('textContent')
+    try:
+        product_rating = product_info.find_element_by_css_selector('div.rev > div.stars._s').get_attribute('textContent')
+    except:
+        product_rating = 'No rating'
     return product_name, new_price, normal_price, product_rating, link_button
 
 
 if __name__ == "__main__":
-    try:
-        get_sub_categories()
-        for handle in driver.window_handles:
-            if handle != driver.window_handles[0]:
-                elements, categories, path = window_switching(handle)
-                sub_links = [e.get_attribute('href') for e in elements]
-                i = 0
-                while i < len(categories):
-                    for link in sub_links:
-                        with open(f'{path}/{categories[i]}.csv', 'w', newline='', encoding='utf-8') as file:
-                            file_writer = csv.writer(file)
-                            file_writer.writerow(['Name', 'New Price', 'Old Price', 'Rating', 'URL'])
-                            driver.execute_script(f"window.open('{link}')")
-                            driver.switch_to.window(driver.window_handles[-1])
-                            products = get_products()
-                            for product in products:
-                                name, new_price, old_price, rating, web_link = get_product_info(product)
-                                file_writer.writerow([name, new_price, old_price, rating, web_link])
-                            driver.close()
-                            driver.switch_to.window(handle)
-                            i += 1
-    except Exception as e:
-       driver.close()
-    finally:
-        driver.quit()    
+    # try:
+    categories = get_sub_categories()
+    # loop through each open window apart from the initial one
+    j = -1
+    for handle in driver.window_handles:
+        if handle != driver.window_handles[0]:
+            elements, subcategories = window_switching(handle)
+            sub_links = [e.get_attribute('href') for e in elements]
+            i = 0
+            while i < len(subcategories):
+                for link in sub_links:
+                    with open(f'{FOLDER}/{categories[j]}/{subcategories[i]}.csv', 'w', newline='', encoding='utf-8') as file:
+                        file_writer = csv.writer(file)
+                        file_writer.writerow(['Name', 'New Price', 'Old Price', 'Rating', 'URL'])
+                        driver.execute_script(f"window.open('{link}')")
+                        driver.switch_to.window(driver.window_handles[-1])
+                        products = get_products()
+                        for product in products:
+                            name, new_price, old_price, rating, web_link = get_product_info(product)
+                            file_writer.writerow([name, new_price, old_price, rating, web_link])
+                        driver.close()
+                        driver.switch_to.window(handle)
+                        i += 1
+            j -= 1
+    # except Exception as e:
+    #    driver.close()
+        pass
+    # finally:
+        # driver.quit()    
+        pass
