@@ -30,7 +30,7 @@ FOLDER = 'categories'
 def create_folder(title):
     path = os.path.join(FOLDER, title)
     os.makedirs(path)
-    return path
+    return
 
 # get Cateogry names
 def get_category_names(tag):
