@@ -2,6 +2,8 @@
 
 A web scraper that gathers cheapest black friday deals per category on multiple e-commerce sites
 
+**Estimated Scrape Time**: *15 minutes*
+
 ## Requirements
 
 This project requires preferably version 86.0.4240 of Chrome browser as well as Python 3 installed on the host system.
@@ -54,4 +56,4 @@ python main.py
 
 ## Development Status
 
-- **In progress**
+- **Completed**
